@@ -16,13 +16,13 @@ A simple animal shelter with:
 | Service | `AnimalService` | Mockito unit tests |
 | Controller | `AnimalController` | MockMvc with `@WebMvcTest` |
 | Repository | `AnimalRepository` | `@DataJpaTest` |
-| Full flow | create → adopt → notify | `@SpringBootTest` with `@MockBean` |
+| Full flow | create → adopt → notify | `@SpringBootTest` with `@MockitoBean` |
 
 ## External Dependency Seam
 
 `NotificationClient` is the outbound interface.  
 In production, `LoggingNotificationClient` logs to stdout.  
-In integration tests, students replace it with `@MockBean`.
+In integration tests, students replace it with `@MockitoBean`.
 
 ## Running Tests
 
