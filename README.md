@@ -1,7 +1,6 @@
 # Shelter Testing Starter — Advanced Unit Testing
 
 This Spring Boot project is pre-built for Advanced Unit Testing.
-Students do **not** build this from scratch — they add and modify tests.
 
 ## Domain
 
@@ -22,7 +21,7 @@ A simple animal shelter with:
 
 `NotificationClient` is the outbound interface.  
 In production, `LoggingNotificationClient` logs to stdout.  
-In integration tests, students replace it with `@MockitoBean`.
+In integration tests, can be replaced with `@MockitoBean`.
 
 ## Running Tests
 
@@ -82,4 +81,3 @@ src/test/java/lv/bootcamp/shelter/
 
 - Java 21
 - Maven 3.9+
-- Basic JUnit testing experience
