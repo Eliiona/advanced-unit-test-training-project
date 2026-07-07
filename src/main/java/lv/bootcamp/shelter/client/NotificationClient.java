@@ -7,7 +7,7 @@ import java.util.List;
  * External dependency seam: sends adoption notifications to an external system.
  * <p>
  * In production this would call a remote service (email, SMS, webhook).
- * In tests this interface is mocked with @MockBean to verify that the service
+ * In tests this interface is mocked with @MockitoBean to verify that the service
  * triggers notifications without making real external calls.
  */
 public interface NotificationClient {

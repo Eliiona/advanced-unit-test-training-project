@@ -10,7 +10,7 @@ import java.util.List;
  * Default implementation of NotificationClient.
  * Logs instead of calling a real external service.
  * <p>
- * In integration tests this bean is commonly replaced by @MockBean.
+ * In integration tests this bean is commonly replaced by @MockitoBean.
  */
 @Slf4j
 @Component

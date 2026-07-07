@@ -10,7 +10,7 @@ import lv.bootcamp.shelter.service.AnimalService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.bean.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
 // TODO: add imports as you write the test (e.g. assertThat, verify)
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Task: Integration test with @SpringBootTest.
  *
- * The full application context loads — use @MockBean only for the external
+ * The full application context loads — use @MockitoBean only for the external
  * NotificationClient. Everything else (service, repository, JPA) is real.
  * @Transactional rolls back after each test.
  */
@@ -29,7 +29,7 @@ class AdoptionIntegrationTest {
     @Autowired
     private AnimalService animalService;
 
-    @MockBean
+    @MockitoBean
     private NotificationClient notificationClient;
 
     @Test

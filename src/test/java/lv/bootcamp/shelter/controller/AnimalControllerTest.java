@@ -10,7 +10,7 @@ import lv.bootcamp.shelter.service.AnimalService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.bean.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Task: REST controller tests with MockMvc and @WebMvcTest.
  *
- * Stub the service with @MockBean. Use mockMvc.perform() to make requests
+ * Stub the service with @MockitoBean. Use mockMvc.perform() to make requests
  * and chain .andExpect() calls to verify status, JSON content, and error responses.
  */
 @WebMvcTest(AnimalController.class)
@@ -37,7 +37,7 @@ class AnimalControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private AnimalService animalService;
 
     @Test
