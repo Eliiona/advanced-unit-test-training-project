@@ -108,6 +108,23 @@ public class AnimalService {
     }
 
     /**
+     * Deletes an animal by ID.
+     * <p>
+     * Restricted to ROLE_ADMIN in {@code SecurityConfig} — a good target for
+     * MockMvc security tests: authorized role succeeds, wrong role gets 403,
+     * no auth gets 401 (see {@code AnimalControllerSecurityTest}).
+     *
+     * @throws AnimalNotFoundException if no animal with the given ID exists
+     */
+    @Transactional
+    public void delete(Long id) {
+        if (!animalRepository.existsById(id)) {
+            throw new AnimalNotFoundException(id);
+        }
+        animalRepository.deleteById(id);
+    }
+
+    /**
      * Reserves multiple animals at once and notifies an external system
      * with the list of affected IDs.
      * <p>

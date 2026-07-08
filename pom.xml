@@ -53,6 +53,13 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
+        <!-- Security: HTTP Basic auth + role-based endpoint protection (M9),
+             exercised in AnimalControllerSecurityTest with @WithMockUser -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!-- Lombok: reduces boilerplate -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -64,6 +71,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Test: @WithMockUser, SecurityMockMvcRequestPostProcessors (csrf(), etc.) -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

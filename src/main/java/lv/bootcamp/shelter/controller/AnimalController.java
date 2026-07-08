@@ -47,4 +47,15 @@ public class AnimalController {
     public AnimalResponse adopt(@RequestBody @Valid AdoptionRequest request) {
         return animalService.adopt(request);
     }
+
+    /**
+     * Deletes an animal. Restricted to ROLE_ADMIN — see SecurityConfig.
+     * Purpose-built for testing role-based authorization with MockMvc:
+     * see AnimalControllerSecurityTest for the ADMIN/USER/anonymous cases.
+     */
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        animalService.delete(id);
+    }
 }
