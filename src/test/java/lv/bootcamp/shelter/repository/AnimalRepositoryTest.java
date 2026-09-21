@@ -8,15 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Task: Repository tests with @DataJpaTest.
- *
- * Use entityManager.persist() + entityManager.flush() to set up test data.
- * Each test rolls back automatically — no cleanup needed.
+ * Ticket: ANIMAL-3 (see README).
+ * findByStatus_shouldReturnOnlyMatchingAnimals is already implemented —
+ * mirror this pattern (and AdopterRepositoryTest's constraint test) to add
+ * the second method yourself. You'll also need to create
+ * AdoptionRecordRepositoryTest from scratch (see README).
  */
 @DataJpaTest
 class AnimalRepositoryTest {
@@ -28,35 +27,22 @@ class AnimalRepositoryTest {
     private TestEntityManager entityManager;
 
     @Test
-    void save_shouldPersistAnimalAndGenerateId() {
-        // TODO:
-        // 1. Create an Animal with id=null
-        // 2. Call animalRepository.save()
-        // 3. Assert the returned animal has a non-null id and the correct name
-    }
-
-    @Test
     void findByStatus_shouldReturnOnlyMatchingAnimals() {
-        // TODO:
-        // 1. Persist two AVAILABLE animals and one ADOPTED animal via entityManager
-        //    Call entityManager.flush() after persisting
-        // 2. Call animalRepository.findByStatus(AVAILABLE)
-        // 3. Assert only the two available animals are returned
+        entityManager.persist(newAnimal("Rex", AnimalType.DOG, AnimalStatus.AVAILABLE));
+        entityManager.persist(newAnimal("Mia", AnimalType.CAT, AnimalStatus.ADOPTED));
+        entityManager.flush();
+
+        var available = animalRepository.findByStatus(AnimalStatus.AVAILABLE);
+
+        assertThat(available).hasSize(1);
+        assertThat(available.getFirst().getName()).isEqualTo("Rex");
     }
 
-    @Test
-    void findByType_shouldReturnAnimalsOfGivenType() {
-        // TODO:
-        // 1. Persist one DOG and one CAT, flush
-        // 2. Call animalRepository.findByType(DOG)
-        // 3. Assert only the dog is returned
-    }
-
-    @Test
-    void findByNameContainingIgnoreCase_shouldMatchPartialName() {
-        // TODO:
-        // 1. Persist animals named "Rex", "Rexy Jr", and "Mia", flush
-        // 2. Call animalRepository.findByNameContainingIgnoreCase("rex")
-        // 3. Assert two results are returned (case-insensitive partial match)
+    private Animal newAnimal(String name, AnimalType type, AnimalStatus status) {
+        Animal animal = new Animal();
+        animal.setName(name);
+        animal.setType(type);
+        animal.setStatus(status);
+        return animal;
     }
 }

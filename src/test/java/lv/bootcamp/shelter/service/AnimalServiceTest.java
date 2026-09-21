@@ -1,6 +1,12 @@
 package lv.bootcamp.shelter.service;
 
 import lv.bootcamp.shelter.client.NotificationClient;
+import lv.bootcamp.shelter.dto.AdoptionRequest;
+import lv.bootcamp.shelter.dto.AnimalCreateRequest;
+import lv.bootcamp.shelter.dto.AnimalResponse;
+import lv.bootcamp.shelter.model.Animal;
+import lv.bootcamp.shelter.model.AnimalStatus;
+import lv.bootcamp.shelter.model.AnimalType;
 import lv.bootcamp.shelter.repository.AnimalRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,13 +14,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-// TODO: add any imports you need as you write the tests
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 /**
- * Task: Service-layer tests with Mockito.
- *
- * Use @Mock, @InjectMocks, stubbing, verify(), and ArgumentCaptor.
- * Write Arrange-Act-Assert for each method.
+ * Ticket: ANIMAL-1 (see README).
+ * Three tests are already implemented as a worked example (also see
+ * AdopterServiceTest for the same pattern) — add the remaining tests yourself.
  */
 @ExtendWith(MockitoExtension.class)
 class AnimalServiceTest {
@@ -30,52 +40,41 @@ class AnimalServiceTest {
 
     @Test
     void create_shouldSaveAnimalWithAvailableStatus() {
-        // TODO:
-        // 1. Arrange: create an AnimalCreateRequest for a dog named "Rex"
-        //    Stub animalRepository.save() to return a saved Animal with id=1 and status=AVAILABLE
-        // 2. Act: call animalService.create(request)
-        // 3. Assert: response has id=1, name="Rex", status=AVAILABLE
-        // 4. Use ArgumentCaptor to capture the Animal passed to save()
-        //    and assert its status was set to AVAILABLE before saving
+        Animal saved = new Animal();
+        saved.setId(1L);
+        saved.setName("Rex");
+        saved.setType(AnimalType.DOG);
+        saved.setStatus(AnimalStatus.AVAILABLE);
+
+        when(animalRepository.save(any(Animal.class))).thenReturn(saved);
+
+        AnimalResponse response = animalService.create(
+                new AnimalCreateRequest("Rex", AnimalType.DOG, "Labrador", 3, "Friendly", null));
+
+        assertThat(response.id()).isEqualTo(1L);
+        assertThat(response.name()).isEqualTo("Rex");
+        assertThat(response.status()).isEqualTo(AnimalStatus.AVAILABLE);
     }
 
     @Test
     void findById_shouldThrowWhenAnimalNotFound() {
-        // TODO:
-        // 1. Arrange: stub animalRepository.findById(99L) to return Optional.empty()
-        // 2. Act & Assert: calling animalService.findById(99L) should throw
-        //    AnimalNotFoundException with the id in the message
-    }
+        when(animalRepository.findById(99L)).thenReturn(Optional.empty());
 
-    @Test
-    void adopt_shouldChangeStatusAndSendNotification() {
-        // TODO:
-        // 1. Arrange: create an AVAILABLE animal, stub findById() to return it,
-        //    stub save() to return the argument passed to it (hint: thenAnswer)
-        // 2. Act: call animalService.adopt() with animalId=1 and email="john@example.com"
-        // 3. Assert: response status is ADOPTED
-        // 4. Verify: notificationClient.sendAdoptionNotification() was called
-        //    with the correct animalId, name, and email
+        assertThatThrownBy(() -> animalService.findById(99L))
+                .isInstanceOf(AnimalNotFoundException.class)
+                .hasMessageContaining("99");
     }
 
     @Test
     void adopt_shouldThrowWhenAnimalAlreadyAdopted() {
-        // TODO:
-        // 1. Arrange: create an ADOPTED animal, stub findById() to return it
-        // 2. Act & Assert: calling adopt() should throw IllegalStateException
-        // 3. Verify: notificationClient had NO interactions at all
-    }
+        Animal adopted = new Animal();
+        adopted.setId(1L);
+        adopted.setStatus(AnimalStatus.ADOPTED);
 
-    @Test
-    void reserveMultiple_shouldNotifyWithReservedIds() {
-        // TODO:
-        // 1. Arrange: create two AVAILABLE animals (id=1, id=2),
-        //    stub findAllById() to return them,
-        //    stub save() to return the argument (thenAnswer)
-        // 2. Act: call animalService.reserveMultiple(List.of(1L, 2L))
-        // 3. Assert: both responses have status RESERVED
-        // 4. Use @Captor (ArgumentCaptor<List<Long>>) to capture the list
-        //    passed to notificationClient.sendBulkStatusNotification()
-        //    and assert it containsExactly(1L, 2L)
+        when(animalRepository.findById(1L)).thenReturn(Optional.of(adopted));
+
+        assertThatThrownBy(() -> animalService.adopt(
+                new AdoptionRequest(1L, "Anna", "anna@example.com")))
+                .isInstanceOf(IllegalStateException.class);
     }
 }

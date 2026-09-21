@@ -1,5 +1,6 @@
 package lv.bootcamp.shelter.controller;
 
+import lv.bootcamp.shelter.service.AdopterNotFoundException;
 import lv.bootcamp.shelter.service.AnimalNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -17,6 +18,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AnimalNotFoundException.class)
     public ProblemDetail handleNotFound(AnimalNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(AdopterNotFoundException.class)
+    public ProblemDetail handleAdopterNotFound(AdopterNotFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 

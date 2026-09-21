@@ -21,10 +21,10 @@ import org.springframework.security.web.SecurityFilterChain;
  *       {@code user}/{@code user123} (ROLE_USER only) and
  *       {@code admin}/{@code admin123} (ROLE_ADMIN only).</li>
  *   <li>Anyone (including anonymous visitors) can browse {@code /animals} and
- *       read/write the API ({@code GET}/{@code POST /api/animals/**}) \u2014 this
+ *       read/write the API ({@code GET}/{@code POST /api/animals/**}) — this
  *       keeps the existing MockMvc tests (which don't use
  *       {@code @WithMockUser}) working unchanged.</li>
- *   <li>Only ROLE_ADMIN can delete an animal ({@code DELETE /api/animals/{id}}) \u2014
+ *   <li>Only ROLE_ADMIN can delete an animal ({@code DELETE /api/animals/{id}}) —
  *       a purpose-built restricted endpoint so students have something to
  *       exercise with {@code @WithMockUser(roles = "ADMIN"/"USER")} and an
  *       anonymous (no-auth) request. See {@code AnimalControllerSecurityTest}.</li>
@@ -35,9 +35,9 @@ import org.springframework.security.web.SecurityFilterChain;
  * <p><b>Optional bonus (ungraded, not checked):</b> swap HTTP Basic for JWT on
  * {@code /api/**}, then test the filter itself instead of relying on
  * {@code @WithMockUser}. This adds real complexity and is intentionally kept
- * out of the core practical task \u2014 see the module notes on Slide 14/24 for
- * why, and see Task_M12's {@code SecurityConfig} for a worked JWT bonus example
- * if you want to attempt it anyway:
+ * out of the core practical task — see the module deck's security-testing
+ * slide and its JWT-scope note in the Practical work section for why. If you
+ * want to attempt it anyway:
  * <ol>
  *   <li>Add a {@code POST /api/auth/login} endpoint that authenticates via
  *       {@code AuthenticationManager} and returns a signed JWT.</li>
@@ -81,6 +81,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.DELETE, "/api/animals/**").hasRole("ADMIN")
                         .requestMatchers("/api/animals/**").permitAll()
+                        .requestMatchers("/api/adopters/**").permitAll()
                         .requestMatchers("/animals", "/animals/**").permitAll()
                         .anyRequest().authenticated()
                 )

@@ -36,6 +36,11 @@ public class Animal {
 
     private String description;
 
+    // Nullable but unique when present — not every animal is chipped yet.
+    // Target of the ANIMAL-3 constraint test (AnimalRepositoryTest).
+    @Column(unique = true)
+    private String microchipId;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AnimalStatus status;

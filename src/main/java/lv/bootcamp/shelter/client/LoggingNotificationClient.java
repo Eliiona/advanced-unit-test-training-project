@@ -27,4 +27,9 @@ public class LoggingNotificationClient implements NotificationClient {
         log.info("Bulk status notification: {} animal(s) changed to {} — ids: {}",
                 animalIds.size(), newStatus, animalIds);
     }
+
+    @Override
+    public void sendApprovalNotification(String adopterEmail, String animalName) {
+        log.info("Approval notification: {} approved to adopt {}", adopterEmail, animalName);
+    }
 }

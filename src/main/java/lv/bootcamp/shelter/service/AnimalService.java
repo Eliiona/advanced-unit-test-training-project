@@ -50,15 +50,31 @@ public class AnimalService {
 
     /**
      * Creates a new animal with status AVAILABLE.
+     * <p>
+     * If a microchip ID is supplied, this checks for an existing animal with
+     * the same microchip first and rejects the request if one is found.
+     * Note: this check-then-act pattern is <b>not</b> race-safe on its own
+     * — the database-level unique constraint on {@code Animal.microchipId}
+     * is what actually guarantees uniqueness under concurrent requests (see
+     * the concurrency bonus ticket in the README).
+     *
+     * @throws IllegalStateException if the microchip ID is already registered
      */
     @Transactional
     public AnimalResponse create(AnimalCreateRequest request) {
+        if (request.microchipId() != null
+                && animalRepository.existsByMicrochipId(request.microchipId())) {
+            throw new IllegalStateException(
+                    "Animal with microchip %s is already registered".formatted(request.microchipId()));
+        }
+
         Animal animal = new Animal();
         animal.setName(request.name());
         animal.setType(request.type());
         animal.setBreed(request.breed());
         animal.setAge(request.age());
         animal.setDescription(request.description());
+        animal.setMicrochipId(request.microchipId());
         animal.setStatus(AnimalStatus.AVAILABLE);
 
         Animal saved = animalRepository.save(animal);

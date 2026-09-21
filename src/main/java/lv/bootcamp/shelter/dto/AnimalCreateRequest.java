@@ -14,6 +14,7 @@ public record AnimalCreateRequest(
         @NotNull AnimalType type,
         String breed,
         @Min(0) Integer age,
-        String description
+        String description,
+        String microchipId
 ) {
 }

@@ -28,4 +28,10 @@ public interface NotificationClient {
      * @param newStatus the new status label
      */
     void sendBulkStatusNotification(List<Long> animalIds, String newStatus);
+
+    /**
+     * Sends an approval notification once an adoption-eligibility check passes
+     * (see AdoptionEligibilityService, COVERAGE-1).
+     */
+    void sendApprovalNotification(String adopterEmail, String animalName);
 }
